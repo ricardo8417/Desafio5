@@ -1,0 +1,35 @@
+<h2>Products</h2>
+<a href="/form-products">Crear Productos</a>
+<hr>
+<table border="1">
+<thead>
+<tr>
+    <td>Id</td>
+    <td>Title</td>
+    <td>Descripcion</td>
+    <td>Price</td>
+    <td>Thumbnail</td>
+    <td>Code</td>
+    <td>Stock</td>
+    <td>Acciones</td>
+   
+</tr>
+
+</thead>
+    <tbody>
+        {{#each products}}
+        <tr>
+          <td>{{this.id}}</td>
+        <td>{{this.title}}</td>
+        <td>{{this.descripcion}}</td>
+        <td>{{this.price}}</td>
+        <td>{{this.thumbnail}}</td>
+        <td>{{this.code}}</td>
+        <td>{{this.stock}}</td>
+        <td><a href="/{{this._id}}">🗑</a></td>
+        </tr>
+        {{/each}}
+    </tbody>
+
+
+</table>

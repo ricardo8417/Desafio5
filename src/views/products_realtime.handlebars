@@ -1,0 +1,96 @@
+<h2>Products - Real Time</h2>
+
+{{!-- Formulario para dar de alta Productos --}}
+
+<form id="formProducts">
+    Title:<input type="text" name="title">
+    <br>
+    Descripcion:<input type="text" name="descripcion">
+    <br>
+    Price:<input type="number" name="price">
+    <br>
+    Thumbnail:<input type="text" name="thumbnail">
+    <br>
+    Code:<input type="text" name="code">
+    <br>
+    Stock:<input type="number" name="stock">
+    <br>
+    <button type="submit">Enviar</button>
+</form>
+
+<hr>
+
+{{!-- Tabla para visualización de los productos --}}
+<table border="1">
+<thead>
+<tr>
+    <td>Id</td>
+    <td>Title</td>
+    <td>Descripcion</td>
+    <td>Price</td>
+    <td>Thumbnail</td>
+    <td>Code</td>
+    <td>Stock</td>
+   
+</tr>
+
+</thead>
+    <tbody id="tbody">
+        {{#each products}}
+        <tr>
+          <td>{{this.id}}</td>
+        <td>{{this.title}}</td>
+        <td>{{this.descripcion}}</td>
+        <td>{{this.price}}</td>
+        <td>{{this.thumbnail}}</td>
+        <td>{{this.code}}</td>
+        <td>{{this.stock}}</td>
+        </tr>
+        {{/each}}
+    </tbody>
+
+
+</table>
+{{!-- instanciamos socket.io --}}
+<script src="/socket.io/socket.io.js"> </script>
+<script>
+        const socket = io()
+
+    document.getElementById('formProducts').onsubmit=e=>{
+        e.preventDefault()
+
+   const title= document.querySelector('input[name=title]').value
+        const descripcion = document.querySelector('input[name=descripcion]').value
+        const price = parseInt(document.querySelector('input[name=price]').value)
+        const thumbnail = document.querySelector('input[name=thumbnail]').value
+        const code = document.querySelector('input[name=code]').value
+        const stock =parseInt(document.querySelector('input[name=stock]').value) 
+      
+      const product={title,descripcion,price,thumbnail,code,stock}
+     socket.emit('new-product',product)
+
+    }
+
+    socket.on('reload-table',productos=>{
+        console.log(productos)
+       const tbody =  document.getElementById('tbody')
+
+       let html = ''
+     productos.forEach(producto=>{
+          html += `<tr>
+          <td>${producto.id}</td>
+          <td>${producto.title}</td>
+          <td>${producto.descripcion}</td>
+          <td>${producto.price}</td>
+          <td>${producto.thumbnail}</td>
+          <td>${producto.code}</td>
+          <td>${producto.stock}</td>
+         </tr> `
+
+
+     })
+        
+        tbody.innerHTML=html
+    })
+    
+    </script>
