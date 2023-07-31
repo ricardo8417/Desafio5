@@ -25,7 +25,7 @@ router.post("/", async (req, res) => {
 
     //2 uso el modelo para subir el objeto a la base de datos:
 
-    const result = await productModel.save(newProduct);
+    const result = await productModel.create(newProduct);
 
     res.send({ status: "success", payload: result });
   } catch (error) {
@@ -35,10 +35,15 @@ router.post("/", async (req, res) => {
 });
 
 //Borrar Productos
-router.get('/:pid',async(req,res)=>{
-const id = req.params.pid;
-   await productModel.deleteOne({_id:id})
-  res.redirect("/products");
+router.delete('/:pid',async(req,res)=>{
+  try{
+    const id = req.params.pid;
+       await productModel.deleteOne({_id:id})
+      res.redirect("/products");
+
+  }catch(error){
+    res.send({ result: "error", error });
+  }
 })
 
 
