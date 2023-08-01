@@ -7,6 +7,7 @@ import cartRouter from './routes/cart.router.js'
 import viewsRouter from './routes/views.router.js'
 
 import __dirname from './utils.js'
+import productModel from "./Dao/models/Product.models.js";
 
 
 const app = express()
@@ -24,49 +25,35 @@ app.use('/', viewsRouter)
 app.use('/api/products',productsRouter)
 app.use('/api/carts',cartRouter)
 
-//Conección a la Database
-mongoose.set("strictQuery", false);
-const URL =
-  "mongodb+srv://ricardo:Matrix39@cluster0.e5qotqq.mongodb.net/?retryWrites=true&w=majority";
-mongoose.connect(URL, {dbName: "ecommerce",})
-.then(() => {console.log("DB connected!!");
-     //Corremos el Servidor o Server
-    //  const io = new Server(server);
-    const server = app.listen(8080, () => console.log("Listening..."));
-    server.on("error", (e) => console.error(e));
+//Configuración socket.io
+const runServer = () => {
+  const httpServer= app.listen(8080,()=>console.log('Listening...'));
+  const io = new Server(httpServer);
+  io.on('connection', socket=>{
+      socket.on('new-product', async data=>{
+          try{
+              const productManager = productModel()
+              await productManager.create(data)
+  
+  const productos= await productModel.find()
+  io.emit('reload-table',productos)
+            }catch(e){
+          console.error(e)
+            } 
+      })
   })
-  .catch((e) => {
-    console.log("Can't connected to DB");
-  });
+}
+//Conección a la Database
+// mongoose.set("strictQuery", false);
+console.log('conectando...')
+const URL =
+  "mongodb+srv://ricardo:Matrix39@cluster0.e5qotqq.mongodb.net/?retryWrites=true&w=majority"
+mongoose.connect(URL, {dbName: "ecommerce",})
 
+.then(()=>{
+  console.log('DB connected!!')
+  runServer()
 
-// //Configuración socket.io
-// const httpServer= app.listen(8080);
+})
+  .catch(e=> console.log("Can't connected to DB"))
 
-
-// io.on('connection', socket=>{
-//     socket.on('new-product', async data=>{
-//         try{
-             
-//               const { title, descripcion, price,thumbnail, code, stock } =data;
-//             //    const thumbnail = Array.isArray(data.thumbnail)
-//             //      ? data.thumbnail
-//             //      : [data.thumbnail];
-//                   if (!title ||!descripcion ||!price ||!code ||!stock 
-//                   ) {
-//                     console.log("All fields are required");
-//                   }
-//            const productManager = new ProductManager("./dataBase/productos.json");
-
-// await productManager.addProduct(title,descripcion,price,thumbnail,code,stock);
-
-// const productos= await productManager.getProduct()
-// socket.emit('reload-table',productos)
-
-
-//         }catch(e){
-//         console.error(e)
-//         }
-        
-//     })
-// })

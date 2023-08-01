@@ -72,6 +72,18 @@ router.get("/products", async (req, res) => {
    } catch (e) {
      console.error(e);
    }
+
+   //Borrar Productos
+router.delete('/:pid',async(req,res)=>{
+  try{
+    const id = req.params.pid;
+       await productModel.deleteOne({_id:id})
+      res.redirect("/products");
+
+  }catch(error){
+    res.send({ result: "error", error });
+  }
+})
  });
 
 export default router

@@ -1,17 +1,18 @@
 <h2>Products</h2>
 <a href="/form-products">Crear Productos</a>
 <hr>
-<table border="1">
+<div class="table-responsive-sm">
+<table  class="table table-hover table-borderless">
 <thead>
-<tr>
-    <td>Id</td>
-    <td>Title</td>
-    <td>Descripcion</td>
-    <td>Price</td>
-    <td>Thumbnail</td>
-    <td>Code</td>
-    <td>Stock</td>
-    <td>Acciones</td>
+<tr class="table-active">
+    {{!-- <td>Id</td> --}}
+    <th scope="col">Title</th>
+    <th scope="col">Descripcion</th>
+    <th scope="col">Price</th>
+    <th scope="col">Thumbnail</th>
+    <th scope="col">Code</th>
+    <th scope="col">Stock</th>
+    <th scope="col">Acciones</th>
    
 </tr>
 
@@ -19,7 +20,7 @@
     <tbody>
         {{#each products}}
         <tr>
-          <td>{{this.id}}</td>
+          {{!-- <td>{{this.id}}</td> --}}
         <td>{{this.title}}</td>
         <td>{{this.descripcion}}</td>
         <td>{{this.price}}</td>
@@ -33,3 +34,4 @@
 
 
 </table>
+</div>

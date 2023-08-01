@@ -21,36 +21,40 @@
 <hr>
 
 {{!-- Tabla para visualización de los productos --}}
-<table border="1">
-<thead>
-<tr>
-    <td>Id</td>
-    <td>Title</td>
-    <td>Descripcion</td>
-    <td>Price</td>
-    <td>Thumbnail</td>
-    <td>Code</td>
-    <td>Stock</td>
-   
-</tr>
+<div class="table-responsive-sm">
+    <table  class="table table-hover table-borderless">
+        <thead>
+            <tr class="table-active">
+                {{!-- <td>Id</td> --}}
+                <th scope="col">Title</th>
+                <th scope="col">Descripcion</th>
+                <th scope="col">Price</th>
+                <th scope="col">Thumbnail</th>
+                <th scope="col">Code</th>
+                <th scope="col">Stock</th>
+                <th scope="col">Acciones</th>
 
-</thead>
-    <tbody id="tbody">
-        {{#each products}}
-        <tr>
-          <td>{{this.id}}</td>
-        <td>{{this.title}}</td>
-        <td>{{this.descripcion}}</td>
-        <td>{{this.price}}</td>
-        <td>{{this.thumbnail}}</td>
-        <td>{{this.code}}</td>
-        <td>{{this.stock}}</td>
-        </tr>
-        {{/each}}
-    </tbody>
+            </tr>
+
+        </thead>
+        <tbody>
+            {{#each products}}
+            <tr>
+                {{!-- <td>{{this.id}}</td> --}}
+                <td>{{this.title}}</td>
+                <td>{{this.descripcion}}</td>
+                <td>{{this.price}}</td>
+                <td>{{this.thumbnail}}</td>
+                <td>{{this.code}}</td>
+                <td>{{this.stock}}</td>
+                <td><a href="/{{this._id}}">🗑</a></td>
+            </tr>
+            {{/each}}
+        </tbody>
 
 
-</table>
+    </table>
+</div>
 {{!-- instanciamos socket.io --}}
 <script src="/socket.io/socket.io.js"> </script>
 <script>
