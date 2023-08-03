@@ -20,15 +20,15 @@ router.get("/products", async (req, res) => {
 });
 
 
-// router.get("/products-realtime", async (req, res) => {
-//   try {
-//     const products = await productos.getProduct();
+router.get("/products-realtime", async (req, res) => {
+  try {
+    const products = await productModel.find().lean().exec()
 
-// res.render("products_realtime", { products, title:'Formulario Productos' });
-//   } catch (e) {
-//     console.error(e);
-//   }
-// });
+res.render("products_realtime", { products });
+  } catch (e) {
+    console.error(e);
+  }
+});
 
 
 //   //Ruta de formulario de Productos.
@@ -47,7 +47,6 @@ router.get("/products", async (req, res) => {
 //Creamos el post para el formulario
  router.post("/form-products", async (req, res) => {
    try {
-     
      //Se instancia en el body cada campo.
      const title = req.body.title;
      const descripcion = req.body.descripcion;
@@ -65,14 +64,14 @@ router.get("/products", async (req, res) => {
      };
      const result = await productModel.create(newProduct);
 
-    //  res.send({ status: "success", payload: result });
-    
-     res.redirect('/products')
-    //  res.render("form", {});
+     //  res.send({ status: "success", payload: result });
+
+     res.redirect("/products");
+     //  res.render("form", {});
    } catch (e) {
      console.error(e);
    }
-
+ });
    //Borrar Productos
 router.delete('/:pid',async(req,res)=>{
   try{
@@ -84,6 +83,6 @@ router.delete('/:pid',async(req,res)=>{
     res.send({ result: "error", error });
   }
 })
- });
+ 
 
 export default router

@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import productsRouter from './routes/products.router.js'
 import cartRouter from './routes/cart.router.js'
 import viewsRouter from './routes/views.router.js'
+import viewsChatRouter from './routes/viewsChat.router.js'
 
 import __dirname from './utils.js'
 import productModel from "./Dao/models/Product.models.js";
@@ -21,22 +22,41 @@ app.engine('handlebars',handlebars.engine())
 app.set('views', __dirname + '/views' )
 app.set('view engine', 'handlebars')
 
+app.use("/static", express.static(__dirname + "/public"));
+app.get("/health", (req, res) => res.send("OK"));
+app.use("/", viewsChatRouter);
+
 app.use('/', viewsRouter)
 app.use('/api/products',productsRouter)
 app.use('/api/carts',cartRouter)
+
+
 
 //Configuración socket.io
 const runServer = () => {
   const httpServer= app.listen(8080,()=>console.log('Listening...'));
   const io = new Server(httpServer);
+
+
+const messages = [];
+io.on("connection", (socket) => {
+  socket.on("new", (user) => console.log(`${user} se acaba de conectar`));
+
+  socket.on("message", (data) => {
+    messages.push(data);
+    io.emit("logs", messages);
+  });
+});
+
   io.on('connection', socket=>{
       socket.on('new-product', async data=>{
           try{
-              const productManager = productModel()
-              await productManager.create(data)
+              // const productManager = productModel()
+              // await productManager.create(data)
   
-  const productos= await productModel.find()
-  io.emit('reload-table',productos)
+  const productos= await productModel.create(data)
+  const dataproduct=await productModel.find()
+  io.emit('reload-table',dataproduct)
             }catch(e){
           console.error(e)
             } 
@@ -56,4 +76,7 @@ mongoose.connect(URL, {dbName: "ecommerce",})
 
 })
   .catch(e=> console.log("Can't connected to DB"))
+
+
+  
 

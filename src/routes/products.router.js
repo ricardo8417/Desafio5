@@ -35,7 +35,7 @@ router.post("/", async (req, res) => {
 });
 
 //Borrar Productos
-router.delete('/:pid',async(req,res)=>{
+router.get('/delete/:pid',async(req,res)=>{
   try{
     const id = req.params.pid;
        await productModel.deleteOne({_id:id})
