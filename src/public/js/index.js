@@ -4,25 +4,23 @@ let user = sessionStorage.getItem("user") || "";
 
 if (!user) {
   Swal.fire({
-    title: "Auth",
-    input: "text",
-    text: "Set username",
+    title: "Bienvenido",
+    input: "email",
+    text: "Agregue su mail",
     inputValidator: (value) => {
-      return !value.trim() && "Please. Write a username";
+      return !value.trim() && "plase. Write a username";
     },
     allowOutsideClick: false,
-  }).then((result) => {
+  }).then(async (result) => {
     user = result.value;
-    document.getElementById("username").innerHTML = user;
     sessionStorage.setItem("user", user);
-    socket.emit("new", user);
+    console.log(user);
+    socket.emit("new-user", { user });
   });
 } else {
-  document.getElementById("username").innerHTML = user;
-  socket.emit("new", user);
+  console.log(user);
 }
 
-// Enviar mensajes
 chatbox.addEventListener("keyup", (event) => {
   if (event.key === "Enter") {
     const message = chatbox.value.trim();
@@ -31,21 +29,16 @@ chatbox.addEventListener("keyup", (event) => {
         user,
         message,
       });
-
       chatbox.value = "";
     }
   }
 });
-
-// Recibir Mensajes
 socket.on("logs", (data) => {
-  const divLogs = document.getElementById("logs");
   console.log(data);
+  const divLogs = document.getElementById("logs");
   let messages = "";
 
-  data.forEach((msn) => {
-    messages = `<p><i>${msn.user}</i>: ${msn.message}</p>` + messages;
-  });
+  messages += `<p class="text-light">${data.user}</p><p class="text-light"> ${data.message}</p>`;
 
-  divLogs.innerHTML = messages;
+  divLogs.innerHTML += messages;
 });

@@ -1,12 +1,20 @@
 import { Router } from "express";
 // import ProductManager from "../manager/ProductManager.js";
 import productModel from "../Dao/models/Product.models.js";
+import messageModel from "../Dao/models/messages.models.js"
+// import cartModel from "../Dao/models/cart.model.js";
 const router = Router()
 // const productos = new ProductManager("./dataBase/productos.json");
 
 // router.get('/',(req,res)=>{
 //     res.render('index',{})
 // })
+
+
+router.get("/chat", async (req, res) => {
+  const messages = await messageModel.find().lean().exec()
+  res.render("chat", {messages});
+});
 
 // //Consultamos la lista de productos de Nuestra BD
 router.get("/products", async (req, res) => {
