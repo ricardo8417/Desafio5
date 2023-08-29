@@ -26,7 +26,7 @@ router.get("/:cid", async (req, res) => {
 router.post("/", async (req, res) => {
   try {
     
-    new CartModel({ products: [] }).create();
+    new CartModel({ products: [] }).save();
     res.send("se ah creado el carrito");
   } catch (e) {
     res.status(500).send("ocurrio un error al crear el carrito");

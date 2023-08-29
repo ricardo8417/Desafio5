@@ -3,11 +3,13 @@
 <div class="contenido_chat f-flex">
     <div id="logs">
         {{#each messages}}
-        {{#each this.message}}
-        <p class="text-light">{{../user}}</p>
-        <p class="text-light"> {{this}}</p>
+        <div class="message">
+         <span class="user text-light">{{this.user}}:</span><p class="text-light">{{this.message}}</p> 
+
+        </div>
+          
         {{/each}}
-        {{/each}}
+        
     </div>
     <div class="text_box">
         <input class="input_box" id="chatbox">

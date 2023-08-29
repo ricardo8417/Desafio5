@@ -33,12 +33,25 @@ chatbox.addEventListener("keyup", (event) => {
     }
   }
 });
-socket.on("logs", (data) => {
-  console.log(data);
-  const divLogs = document.getElementById("logs");
-  let messages = "";
+// socket.on("logs", (data) => {
+//   console.log(data);
+//   const divLogs = document.getElementById("logs");
+//   let messages = "";
 
-  messages += `<p class="text-light">${data.user}</p><p class="text-light"> ${data.message}</p>`;
+//   messages += `<p class="text-light">${data.user}</p><p class="text-light"> ${data.message}</p>`;
 
-  divLogs.innerHTML += messages;
-});
+//   divLogs.innerHTML += messages;
+// });
+
+ socket.on("logs", (data) => {
+  console.log(data)
+   const divlogs = document.getElementById("logs");
+   let messages = "";
+   data.forEach((message) => {
+     console.log(message);
+     messages =
+       `<p class="text-light"> <i> ${message.user}</i>: ${message.message}</p>` +
+       messages;
+   });
+   divlogs.innerHTML = messages;
+ });

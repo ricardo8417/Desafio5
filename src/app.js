@@ -61,19 +61,22 @@ io.on("connection", (socket) => {
     socket.on("new", (user) => console.log(`${user} se acaba de conectar`));
 
 socket.on("message", async data => {
-          const message = data.message;
-          const user = data.user;
-          const filter = { user: user };
-          const updateData = { $push: { message: message } };
+          // const message = data.message;
+          // const user = data.user;
+          // const filter = { user: user };
+          // const updateData = { $push: { message: message } };
           try {
-            await messagesModel.updateOne(filter, updateData);
-  
-            io.emit("logs", data);
+            // await messagesModel.updateOne(filter, updateData);
+                await messagesModel.create(data);
+                const messages = await messagesModel.find().lean().exec();
+            io.emit("logs", messages);
           } catch (error) {
-            console.error("Error al agregar el mensaje al usuario:", error);
+            console.error("Error al guardar mensajes", error);
           }
           
         })
+     
+
   });
 })
   .catch(e=> console.log("Can't connected to DB"))
